@@ -1,0 +1,36 @@
+#Comprobar Docker-compose:
+#docker-compose -f docker-compose.yml config
+
+version: '3.7'
+
+networks:
+  dockerportainer:
+    name: dockerportainer
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.1.0/24
+
+services:
+
+## Portainer - Gestor Dockers
+  portainer:
+    container_name: Portainer
+    image: portainer/portainer-ce:2.19.5
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    networks:
+      dockerportainer:
+         ipv4_address: 172.30.1.2
+    ports:
+      - '10.11.1.9:9443:9443/tcp'
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /share/MaquinasVirtuales/Docker/portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
