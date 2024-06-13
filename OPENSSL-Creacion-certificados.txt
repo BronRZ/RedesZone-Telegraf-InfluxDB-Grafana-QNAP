@@ -1,0 +1,40 @@
+### Creación certificados SSL/TLS para Telegraf, InfluxDBv2 y Grafana
+
+## Configuración de los certificados, se puede cambiar a través de los comandos de OpenSSL:
+# ECDSA
+# secp384r1
+# ecdsa-with-SHA512
+# Validez de 10 años
+# subjectAltName --> tenemos que poner la dirección IP del servidor InfluxDBv2, sino no funcionará cuando hagamos la comprobación desde Grafana.
+
+
+#Creamos la autoridad de certificación (CA) que usaremos en Telegraf y Grafana para comprobar el certificado de InfluxDBv2
+openssl ecparam -genkey -name secp384r1 -out redeszone-ca.key
+openssl req -x509 -new -SHA512 -nodes -key redeszone-ca.key -days 3650 -out redeszone-ca.crt
+
+#Creamos el certificado del servidor, es fundamental no olvidar el subjectAltName al firmar el certificado, tenemos que poner la IP del servidor donde está InfluxDBv2
+
+openssl ecparam -genkey -name secp384r1 -out redeszone-autofirmado.key
+openssl req -new -SHA512 -key redeszone-autofirmado.key -nodes -out redeszone-autofirmado.csr
+openssl req -in redeszone-autofirmado.csr -noout -text
+
+#Crear el fichero "opciones.txt" con el siguiente contenido
+
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+IP.1 = 10.11.1.9
+
+#Aqui es donde debes poner la IP del servidor de InfluxDBv2 que se debe corresponder con el NAS.
+#Guardamos el archivo.
+
+#Firmamos el certificado del servidor con toda la información
+
+openssl x509 -req -SHA512 -extfile opciones.txt -days 3650 -in redeszone-autofirmado.csr -CA redeszone-ca.crt -CAkey redeszone-ca.key -CAcreateserial -out redeszone-autofirmado.crt
+
+#De todos los archivos que nos crea, debemos usar:
+#redeszone-ca.crt para Telegraf y para Grafana, esto sirve para conectarse con InfluxDBv2 y comprobar el certificado TLS
+#redeszone-autofirmado.crt y redeszone-autofirmado.key tanto en InfluxDBv2 como en Grafana, ya que será el certificado HTTPS

@@ -1,0 +1,84 @@
+#Comprobar Docker-compose:
+#docker-compose -f docker-compose.yml config
+
+version: '3.7'
+
+networks:
+  dockerredeszone:
+    name: dockerredeszone
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.2.0/24
+
+services:
+
+#Telegraf para leer datos del QNAP via SNMP
+  telegraf:
+    image: telegraf:latest
+    hostname: "QNAPredeszone"
+    container_name: telegraf
+    restart: unless-stopped
+    networks:
+      dockerredeszone:
+         ipv4_address: 172.30.2.2
+    ports:
+       - '10.11.1.9:8125:8125/tcp'
+    environment:
+      - TZ=Europe/Madrid
+    volumes:
+       - /share/MaquinasVirtuales/Docker/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+       - /share/MaquinasVirtuales/Docker/telegraf/mibs:/usr/share/snmp/mibs
+       - /share/MaquinasVirtuales/Docker/telegraf/conf.d:/etc/telegraf/telegraf.d
+       - /share/MaquinasVirtuales/Docker/telegraf/redeszone-ca.crt:/etc/telegraf/redeszone-ca.crt
+    depends_on:
+      - influxdb
+
+#InfluxDB para Home Assistant y otros servicios
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    restart: unless-stopped
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=redeszone
+      - DOCKER_INFLUXDB_INIT_PASSWORD=redeszone123
+      - DOCKER_INFLUXDB_INIT_ORG=RedesZoneORG
+      - DOCKER_INFLUXDB_INIT_BUCKET=RedesZoneBUCKET
+      - INFLUXD_TLS_CERT=/etc/ssl/redeszone-autofirmado.crt
+      - INFLUXD_TLS_KEY=/etc/ssl/redeszone-autofirmado.key
+    networks:
+      dockerredeszone:
+         ipv4_address: 172.30.2.3
+    ports:
+      - '10.11.1.9:8086:8086/tcp'
+    volumes:
+      - /share/MaquinasVirtuales/Docker/influxdb/influxdb_data:/var/lib/influxdb2
+      - /share/MaquinasVirtuales/Docker/influxdb/config:/etc/influxdb2
+      - /share/MaquinasVirtuales/Docker/influxdb/redeszone-autofirmado.crt:/etc/ssl/redeszone-autofirmado.crt
+      - /share/MaquinasVirtuales/Docker/influxdb/redeszone-autofirmado.key:/etc/ssl/redeszone-autofirmado.key
+
+#Grafana para mostrar todo lo de InfluxDB
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    networks:
+      dockerredeszone:
+         ipv4_address: 172.30.2.4
+    ports:
+      - '10.11.1.9:8088:3000/tcp'
+    volumes:
+      - /share/MaquinasVirtuales/Docker/grafana/grafana_data:/var/lib/grafana
+      - /share/MaquinasVirtuales/Docker/grafana/redeszone-autofirmado.crt:/etc/ssl/redeszone-autofirmado.crt
+      - /share/MaquinasVirtuales/Docker/grafana/redeszone-autofirmado.key:/etc/ssl/redeszone-autofirmado.key
+    depends_on:
+      - influxdb
+    environment:
+       - GF_SERVER_CERT_FILE=/etc/ssl/redeszone-autofirmado.crt
+       - GF_SERVER_CERT_KEY=/etc/ssl/redeszone-autofirmado.key
+       - GF_SERVER_PROTOCOL=https
+       - GF_SECURITY_ADMIN_USER=redeszone
+       - GF_SECURITY_ADMIN_PASSWORD=redeszone123
+
+## FIN ##

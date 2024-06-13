@@ -1,0 +1,367 @@
+## COMPROBAR LAS MIBS CON EL SNMP
+##snmpget -v3  -l authPriv -u telegraf -a SHA -A "redeszone"  -x DES -X "redeszone" 10.11.1.9 QTS-MIB::upsBatteryChargeWarningLevel.0
+
+[[outputs.influxdb_v2]]
+  urls = ["https://10.11.1.9:8086/"]
+  token = "TOKEN_DEL_INFLUXDB2"
+  organization = "RedesZoneORG"
+  bucket = "RedesZoneBUCKET"
+  tls_ca = "/etc/telegraf/redeszone-ca.crt"
+
+[[inputs.snmp]]
+   # Direccion IP del servidor NAS.
+   agents = [ "10.11.1.9" ]
+   # Intervalo de consulta al NAS
+   interval = "30s"
+   # Timeout a la hora de hacer la peticion de la Query
+   timeout = "30s"
+   # Numero de intentos máximos antes de dar timeout.
+   retries = 3
+   # The GETBULK max-repetitions parameter
+   max_repetitions = 10
+   # Nombre del SNMP
+   name = "snmp.QNAP_NAS"
+   #SNMPv3
+   version = 3
+   sec_name = "telegraf"
+   auth_protocol = "SHA"
+   auth_password = "redeszone"
+   sec_level = "authPriv"
+   priv_protocol = "DES"
+   priv_password = "redeszone"
+
+   path = ["/usr/share/snmp/mibs"]
+
+###### QuTS hero #####
+######
+###### Si usas QTS todo lo que hay abajo debes quitarlo, y dejar solamente la parte de QTS.
+######
+
+  ##
+  ## Detalles del sistema operativo y todas las métricas
+  ##
+  
+  # CPU
+  [[inputs.snmp.field]]
+    name = "nombre_nas"
+    oid = "QTS-MIB::enclosureName.1"
+  [[inputs.snmp.field]]
+    name = "cpu_uso"
+    oid = "QTS-MIB::systemCPU-Usage.0"
+
+  # Memoria RAM
+  [[inputs.snmp.field]]
+  name = "memoria_ram_total"
+  oid = "QTS-MIB::systemTotalMem.0"
+  [[inputs.snmp.field]]
+  name = "memoria_ram_libre"
+  oid = "QTS-MIB::systemFreeMem.0"
+  [[inputs.snmp.field]]
+  name = "memoria_ram_disponible"
+  oid = "QTS-MIB::systemAvailableMem.0"
+  [[inputs.snmp.field]]
+  name = "memoria_ram_usada"
+  oid = "QTS-MIB::systemUsedMemory.0"
+  [[inputs.snmp.field]]
+  name = "memoria_cache_usada"
+  oid = "QTS-MIB::systemCacheMemory.0"
+  [[inputs.snmp.field]]
+  name = "memoria_buffer"
+  oid = "QTS-MIB::systemBufferMemory.0"
+
+  # Uptime
+  [[inputs.snmp.field]]
+  name = "tiempo_uso"
+  oid = "QTS-MIB::sysUptime.0"
+  
+  # Version actual firmware
+  [[inputs.snmp.field]]
+  name = "firmware_version_actual"
+  oid = "QTS-MIB::firmwareVersion.0"
+
+  # Version disponble del firmware
+  [[inputs.snmp.field]]
+  name = "firmware_version_nueva"
+  oid = "QTS-MIB::firmwareUpgradeAvailable.0"  
+
+  # Temperatura
+  [[inputs.snmp.field]]
+  name = "temperatura_sistema"
+  oid = "QTS-MIB::enclosureSystemTemp.1"
+  [[inputs.snmp.field]]
+  name = "temperatura_sistema_2"
+  oid = "QTS-MIB::systemTemperature.0"
+  [[inputs.snmp.field]]
+  name = "temperatura_cpu"
+  oid = "QTS-MIB::cpuTemperature.0"
+
+
+  #  Ventiladores
+  [[inputs.snmp.field]]
+  name = "rpm_ventilador_1"
+  oid = "QTS-MIB::sysFanSpeed.1"
+  [[inputs.snmp.field]]
+  name = "rpm_ventilador_2"
+  oid = "QTS-MIB::sysFanSpeed.2"
+  [[inputs.snmp.field]]
+  name = "rpm_ventilador_3"
+  oid = "QTS-MIB::sysFanSpeed.3"
+
+  ##
+  ## Discos duros y SSD
+  ##
+  
+# DISCO 1
+# Debes poner tantos discos duros y SSD como tengas instalados en el sistema.
+
+  [[inputs.snmp.field]]
+    name = "disco_numero_1"
+    oid = "QTS-MIB::diskIndex.1"
+  [[inputs.snmp.field]]
+    name = "disco_id_1"
+    oid = "QTS-MIB::diskID.1"
+  [[inputs.snmp.field]]
+    name = "disco_fabricante_1"
+    oid = "QTS-MIB::diskManufacturer.1"
+  [[inputs.snmp.field]]
+    name = "disco_modelo_1"
+    oid = "QTS-MIB::diskModel.1"
+  [[inputs.snmp.field]]
+    name = "disco_numero_serie_1"
+    oid = "QTS-MIB::diskSerialNumber.1"
+  [[inputs.snmp.field]]
+    name = "disco_tipo_1"
+    oid = "QTS-MIB::diskType.1"
+  [[inputs.snmp.field]]
+    name = "disco_estado_1"
+    oid = "QTS-MIB::diskStatus.1"
+  [[inputs.snmp.field]]
+    name = "disco_temperatura_1"
+    oid = "QTS-MIB::diskTemperature.1"
+  [[inputs.snmp.field]]
+    name = "disco_capacidad_1"
+    oid = "QTS-MIB::diskCapacity.1"
+	
+  ##
+  ## Conjuntos de almacenamiento
+  ##
+ 
+#CONJUNTO DE ALMACENAMIENTO 1
+#Debes poner tantos conjuntos de almacenamiento como tengas creados
+
+  [[inputs.snmp.field]]
+    name = "conjunto_almacenamiento_1_ID"
+    oid = "QTS-MIB::storagepoolID.1"
+  [[inputs.snmp.field]]
+    name = "conjunto_almacenamiento_1_capacidad_total"
+    oid = "QTS-MIB::storagepoolCapacity.1"
+  [[inputs.snmp.field]]
+    name = "conjunto_almacenamiento_1_espacio_disponible"
+    oid = "QTS-MIB::storagepoolFreeSize.1"
+  [[inputs.snmp.field]]
+    name = "conjunto_almacenamiento_1_estado"
+    oid = "QTS-MIB::storagepoolStatus.1"
+
+  ##
+  ## Carpetas compartidas (DATASET)
+  ##
+
+#DATASET XXXXXX
+#Debes poner tantas carpetas compartidas como tengas creadas
+  [[inputs.snmp.field]]
+    name = "carpeta_compartida_1_nombre"
+    oid = "QTS-MIB::sharedFolderName.1"
+  [[inputs.snmp.field]]
+    name = "carpeta_compartida_1_capacidad_total"
+    oid = "QTS-MIB::sharedFolderCapacity.1"
+  [[inputs.snmp.field]]
+    name = "carpeta_compartida_1_capacidad_disponible"
+    oid = "QTS-MIB::sharedFolderFreeSize.1"
+  [[inputs.snmp.field]]
+    name = "carpeta_compartida_1_estado"
+    oid = "QTS-MIB::sharedFolderStatus.1"
+
+  ##
+  ## Monitorizacion de un SAI
+  ##
+  
+#Monitorizacion de SAI
+  [[inputs.snmp.field]]
+    name = "ups_modelo"
+    oid = "QTS-MIB::upsModel.0"
+  [[inputs.snmp.field]]
+    name = "ups_carga_porcentaje"
+    oid = "QTS-MIB::upsLoadPercentage.0"	
+  [[inputs.snmp.field]]
+    name = "ups_carga_bateria"
+    oid = "QTS-MIB::upsBatteryCharge.0"	
+  [[inputs.snmp.field]]
+    name = "ups_carga_aviso"
+    oid = "QTS-MIB::upsBatteryChargeWarningLevel.0"
+	
+###### QTS #####
+######
+###### Si usas QuTS hero todo lo que hay abajo debes quitarlo, y dejar solamente la parte de QuTS hero.
+######	
+	
+  ##
+  ## Detalles del sistema operativo y todas las métricas
+  ##
+
+  # CPU
+  [[inputs.snmp.field]]
+    name = "nombre_nas"
+    oid = "QTS-MIB::enclosureName.1"
+  [[inputs.snmp.field]]
+    name = "cpu_uso"
+    oid = "QTS-MIB::systemCPU-Usage.0"
+
+  # Memoria RAM
+  [[inputs.snmp.field]]
+  name = "memoria_ram_total"
+  oid = "QTS-MIB::systemTotalMem.0"
+  [[inputs.snmp.field]]
+  name = "memoria_ram_libre"
+  oid = "QTS-MIB::systemFreeMem.0"
+  [[inputs.snmp.field]]
+  name = "memoria_ram_disponible"
+  oid = "QTS-MIB::systemAvailableMem.0"
+  [[inputs.snmp.field]]
+  name = "memoria_ram_usada"
+  oid = "QTS-MIB::systemUsedMemory.0"
+  [[inputs.snmp.field]]
+  name = "memoria_cache_usada"
+  oid = "QTS-MIB::systemCacheMemory.0"
+  [[inputs.snmp.field]]
+  name = "memoria_buffer"
+  oid = "QTS-MIB::systemBufferMemory.0"
+
+  # Uptime
+  [[inputs.snmp.field]]
+  name = "tiempo_uso"
+  oid = "QTS-MIB::sysUptime.0"
+  
+  # Version actual firmware
+  [[inputs.snmp.field]]
+  name = "firmware_version_actual"
+  oid = "QTS-MIB::firmwareVersion.0"
+
+  # Version disponble del firmware
+  [[inputs.snmp.field]]
+  name = "firmware_version_nueva"
+  oid = "QTS-MIB::firmwareUpgradeAvailable.0"  
+
+  # Temperatura
+  [[inputs.snmp.field]]
+  name = "temperatura_sistema"
+  oid = "QTS-MIB::enclosureSystemTemp.1"
+  [[inputs.snmp.field]]
+  name = "temperatura_cpu"
+  oid = "QTS-MIB::cpuTemperature.0"
+
+  #  Ventiladores
+  [[inputs.snmp.field]]
+  name = "rpm_ventilador_1"
+  oid = "QTS-MIB::sysFanSpeed.1"
+  [[inputs.snmp.field]]
+  name = "rpm_ventilador_2"
+  oid = "QTS-MIB::sysFanSpeed.2"
+  [[inputs.snmp.field]]
+  name = "rpm_ventilador_3"
+  oid = "QTS-MIB::sysFanSpeed.3"
+
+  ##
+  ## Discos duros y SSD
+  ##
+  
+# DISCO 1
+  
+  [[inputs.snmp.field]]
+    name = "disco_numero_1"
+    oid = "QTS-MIB::diskIndex.1"
+  [[inputs.snmp.field]]
+    name = "disco_id_1"
+    oid = "QTS-MIB::diskID.1"
+  [[inputs.snmp.field]]
+    name = "disco_fabricante_1"
+    oid = "QTS-MIB::diskManufacturer.1"
+  [[inputs.snmp.field]]
+    name = "disco_modelo_1"
+    oid = "QTS-MIB::diskModel.1"
+  [[inputs.snmp.field]]
+    name = "disco_numero_serie_1"
+    oid = "QTS-MIB::diskSerialNumber.1"
+  [[inputs.snmp.field]]
+    name = "disco_tipo_1"
+    oid = "QTS-MIB::diskType.1"
+  [[inputs.snmp.field]]
+    name = "disco_estado_1"
+    oid = "QTS-MIB::diskStatus.1"
+  [[inputs.snmp.field]]
+    name = "disco_temperatura_1"
+    oid = "QTS-MIB::diskTemperature.1"
+  [[inputs.snmp.field]]
+    name = "disco_capacidad_1"
+    oid = "QTS-MIB::diskCapacity.1"
+	
+  ##
+  ## Conjuntos de almacenamiento
+  ##
+ 
+#CONJUNTO DE ALMACENAMIENTO 1
+#Debes dar de alta tantos conjuntos de almacenamiento como tengas.
+
+  [[inputs.snmp.field]]
+    name = "conjunto_almacenamiento_1_ID"
+    oid = "QTS-MIB::storagepoolID.1"
+  [[inputs.snmp.field]]
+    name = "conjunto_almacenamiento_1_capacidad_total"
+    oid = "QTS-MIB::storagepoolCapacity.1"
+  [[inputs.snmp.field]]
+    name = "conjunto_almacenamiento_1_espacio_disponible"
+    oid = "QTS-MIB::storagepoolFreeSize.1"
+  [[inputs.snmp.field]]
+    name = "conjunto_almacenamiento_1_estado"
+    oid = "QTS-MIB::storagepoolStatus.1"
+
+  ##
+  ## Volumenes creados en QTS
+  ##
+
+#Volumen 1
+#Debes poner tantos como tengas creados en el QTS.
+  [[inputs.snmp.field]]
+    name = "volumen_1_nombre"
+    oid = "QTS-MIB::volumeName.1"
+  [[inputs.snmp.field]]
+    name = "volumen_1_capacidad_total"
+    oid = "QTS-MIB::volumeCapacity.1"
+  [[inputs.snmp.field]]
+    name = "volumen_1_capacidad_disponible"
+    oid = "QTS-MIB::volumeFreeSize.1"
+  [[inputs.snmp.field]]
+    name = "volumen_1_estado"
+    oid = "QTS-MIB::volumeStatus.1"
+	
+	
+#Monitorizacion de SAI
+  [[inputs.snmp.field]]
+    name = "ups_modelo"
+    oid = "QTS-MIB::upsModel.0"
+  [[inputs.snmp.field]]
+    name = "ups_carga_porcentaje"
+    oid = "QTS-MIB::upsLoadPercentage.0"	
+  [[inputs.snmp.field]]
+    name = "ups_carga_bateria"
+    oid = "QTS-MIB::upsBatteryCharge.0"	
+  [[inputs.snmp.field]]
+    name = "ups_carga_aviso"
+    oid = "QTS-MIB::upsBatteryChargeWarningLevel.0"	
+	
+	
+	
+	
+	
+	
+	
+	
