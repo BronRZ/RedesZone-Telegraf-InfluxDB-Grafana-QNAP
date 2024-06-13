@@ -1,0 +1,4130 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Grafana Dashboard para el QNAP TVS-h1288X. Recoge los datos Telegraf y los envía al InfluxDB",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": 18229,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 37,
+      "panels": [],
+      "title": "QNAP TVS-h1288X",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#299c46",
+                "value": null
+              }
+            ]
+          },
+          "unit": "dtdhms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 36,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "alias": "Load 15m",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "groupBy": [],
+          "hide": true,
+          "measurement": "system",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"tiempo_uso\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "uptime_format"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$Host$/"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A/100",
+          "hide": false,
+          "refId": "B",
+          "type": "math"
+        }
+      ],
+      "timeFrom": "30s",
+      "title": "Tiempo Encendido",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#299c46",
+                "value": null
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 38,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^firmware_version_actual \\{agent_host=\"192\\.168\\.10\\.2\", host=\"qnaptvsh1288x\"\\}$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "alias": "Load 15m",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "groupBy": [],
+          "measurement": "system",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"firmware_version_actual\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "uptime_format"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$Host$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": "30s",
+      "title": "Firmware Actual",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#299c46",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "dark-green",
+                        "index": 0,
+                        "text": "No hay actualización"
+                      },
+                      "1": {
+                        "color": "dark-red",
+                        "index": 1,
+                        "text": "Hay actualización nueva"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 39,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "alias": "Load 15m",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "groupBy": [],
+          "measurement": "system",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"firmware_version_nueva\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "uptime_format"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$Host$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": "30s",
+      "title": "¿Hay Actualización?",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "empty",
+                "result": {
+                  "index": 0
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#299c46",
+                "value": null
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 43,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^ups_modelo \\{agent_host=\"192\\.168\\.10\\.2\", host=\"qnaptvsh1288x\"\\}$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "alias": "Load 15m",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "groupBy": [],
+          "measurement": "system",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"ups_modelo\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "uptime_format"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$Host$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": "30s",
+      "title": "SAI - Modelo",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "empty",
+                "result": {
+                  "index": 0
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "#299c46",
+                "value": null
+              },
+              {
+                "color": "dark-orange",
+                "value": 50
+              },
+              {
+                "color": "dark-red",
+                "value": 75
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 44,
+      "maxDataPoints": 100,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^ups_carga_porcentaje \\{agent_host=\"192\\.168\\.10\\.2\", host=\"qnaptvsh1288x\"\\}$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "alias": "Load 15m",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "groupBy": [],
+          "measurement": "system",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"ups_carga_porcentaje\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "uptime_format"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$Host$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": "30s",
+      "title": "SAI - Potencia Actual W%",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "empty",
+                "result": {
+                  "index": 0
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "dark-orange",
+                "value": 40
+              },
+              {
+                "color": "dark-green",
+                "value": 75
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 45,
+      "maxDataPoints": 100,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^ups_carga_bateria \\{agent_host=\"192\\.168\\.10\\.2\", host=\"qnaptvsh1288x\"\\}$/",
+          "values": true
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "alias": "Load 15m",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "groupBy": [],
+          "measurement": "system",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"ups_carga_bateria\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "uptime_format"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$Host$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": "30s",
+      "title": "SAI - Carga Batería %",
+      "type": "gauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 18,
+      "panels": [],
+      "title": "Estado general",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "CPU uso %",
+            "axisPlacement": "auto",
+            "axisSoftMax": 100,
+            "axisSoftMin": 1,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "decimals": 0,
+          "displayName": "Core #${__field.labels.cpuID} - ${__field.labels.agent_host}",
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              },
+              {
+                "color": "dark-orange",
+                "value": 50
+              },
+              {
+                "color": "dark-red",
+                "value": 75
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "id": 4,
+      "interval": "5m",
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"cpu_uso\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Uso",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "RAM uso %",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "decimals": 2,
+          "displayName": "RAM en uso",
+          "fieldMinMax": true,
+          "mappings": [],
+          "max": 70000000000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              },
+              {
+                "color": "dark-orange",
+                "value": 30000000000
+              },
+              {
+                "color": "dark-red",
+                "value": 55000000000
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "id": 10,
+      "interval": "5m",
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"memoria_ram_usada\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        }
+      ],
+      "title": "RAM Uso",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "${__field.labels.sysFanDescrEX}",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": null
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 2100
+              },
+              {
+                "color": "dark-red",
+                "value": 2500
+              }
+            ]
+          },
+          "unit": "rotrpm"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ventilador 1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ventilador 2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ventilador 3"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 13,
+        "x": 0,
+        "y": 13
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "repeat": "qnaphostname",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rpm_ventilador_1\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rpm_ventilador_2\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rpm_ventilador_3\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "C"
+        }
+      ],
+      "title": "Ventiladores",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              },
+              {
+                "color": "dark-orange",
+                "value": 55
+              },
+              {
+                "color": "dark-red",
+                "value": 65
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Temperatura CPU"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Temperatura SIstema"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-green",
+                      "value": null
+                    },
+                    {
+                      "color": "dark-orange",
+                      "value": 40
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 55
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 9,
+        "x": 13,
+        "y": 13
+      },
+      "id": 5,
+      "interval": "5m",
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "repeat": "qnaphostname",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"temperatura_cpu\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"temperatura_sistema\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "B"
+        }
+      ],
+      "title": "Temperaturas",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 75,
+          "min": 25,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              },
+              {
+                "color": "dark-orange",
+                "value": 45
+              },
+              {
+                "color": "dark-red",
+                "value": 60
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "NVMe M.2 #1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "NVMe M.2 #2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "SSD #1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "D"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "SSD #2"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 9,
+        "x": 0,
+        "y": 18
+      },
+      "id": 11,
+      "interval": "5m",
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "10.4.3",
+      "repeat": "qnaphostname",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_1\" or r[\"_field\"] == \"disco_modelo_1\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_2\" or r[\"_field\"] == \"disco_modelo_2\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_3\" or r[\"_field\"] == \"disco_modelo_3\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_4\" or r[\"_field\"] == \"disco_modelo_4\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "D"
+        }
+      ],
+      "title": "Temperaturas SSD",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 65,
+          "min": 25,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              },
+              {
+                "color": "dark-orange",
+                "value": 40
+              },
+              {
+                "color": "dark-red",
+                "value": 50
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "D"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #4"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "E"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #7"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "F"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #8"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 15,
+        "x": 9,
+        "y": 18
+      },
+      "id": 23,
+      "interval": "5m",
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "10.4.3",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_5\" or r[\"_field\"] == \"disco_modelo_5\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_6\" or r[\"_field\"] == \"disco_modelo_6\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_7\" or r[\"_field\"] == \"disco_modelo_7\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_8\" or r[\"_field\"] == \"disco_modelo_8\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_9\" or r[\"_field\"] == \"disco_modelo_9\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_10\" or r[\"_field\"] == \"disco_modelo_10\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "F"
+        }
+      ],
+      "title": "Temperaturas Discos Duros",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 60,
+          "min": 25,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              },
+              {
+                "color": "dark-orange",
+                "value": 45
+              },
+              {
+                "color": "dark-red",
+                "value": 60
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "NVMe M.2 #1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "NVMe M.2 #2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "SSD #1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "D"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "SSD #2"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 9,
+        "x": 0,
+        "y": 23
+      },
+      "id": 46,
+      "interval": "5m",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.2",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_1\" or r[\"_field\"] == \"disco_modelo_1\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_2\" or r[\"_field\"] == \"disco_modelo_2\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_3\" or r[\"_field\"] == \"disco_modelo_3\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_4\" or r[\"_field\"] == \"disco_modelo_4\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "D"
+        }
+      ],
+      "title": "Temperaturas SSD",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 50,
+          "min": 25,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              },
+              {
+                "color": "dark-orange",
+                "value": 40
+              },
+              {
+                "color": "dark-red",
+                "value": 50
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "D"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #4"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "E"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #7"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "F"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HDD #8"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 15,
+        "x": 9,
+        "y": 23
+      },
+      "id": 47,
+      "interval": "5m",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.2",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_5\" or r[\"_field\"] == \"disco_modelo_5\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_6\" or r[\"_field\"] == \"disco_modelo_6\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_7\" or r[\"_field\"] == \"disco_modelo_7\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_8\" or r[\"_field\"] == \"disco_modelo_8\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_9\" or r[\"_field\"] == \"disco_modelo_9\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"disco_temperatura_10\" or r[\"_field\"] == \"disco_modelo_10\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "F"
+        }
+      ],
+      "title": "Temperaturas Discos Duros",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 31
+      },
+      "id": 22,
+      "panels": [],
+      "title": "Uso Almacenamiento",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "fieldMinMax": true,
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "dark-green"
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Libre"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ocupado"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 9,
+        "x": 0,
+        "y": 32
+      },
+      "id": 15,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"conjunto_almacenamiento_1_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A-$B",
+          "hide": false,
+          "refId": "C",
+          "type": "math"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"conjunto_almacenamiento_1_espacio_disponible\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        }
+      ],
+      "title": "Conjunto de Almacenamiento 1 (NVMe)",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": ""
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              },
+              {
+                "color": "dark-yellow",
+                "value": 65
+              },
+              {
+                "color": "dark-orange",
+                "value": 75
+              },
+              {
+                "color": "dark-red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Conjunto Almacenamiento 1 NVMe"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Conjunto Almacenamiento 2 HDD"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 15,
+        "x": 9,
+        "y": 32
+      },
+      "id": 27,
+      "interval": "5m",
+      "options": {
+        "displayMode": "lcd",
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"conjunto_almacenamiento_1_espacio_disponible\" or r[\"_field\"] == \"conjunto_almacenamiento_1_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.conjunto_almacenamiento_1_espacio_disponible) / float(v: r.conjunto_almacenamiento_1_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"conjunto_almacenamiento_2_espacio_disponible\" or r[\"_field\"] == \"conjunto_almacenamiento_2_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.conjunto_almacenamiento_2_espacio_disponible) / float(v: r.conjunto_almacenamiento_2_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        }
+      ],
+      "title": "Conjuntos Almacenamiento %",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "D"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Libre"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ocupado"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 9,
+        "x": 0,
+        "y": 38
+      },
+      "id": 26,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"conjunto_almacenamiento_2_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$C-$D",
+          "hide": false,
+          "refId": "A",
+          "type": "math"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"conjunto_almacenamiento_2_espacio_disponible\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "D"
+        }
+      ],
+      "title": "Conjunto de Almacenamiento 2 (HDD)",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": ""
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              },
+              {
+                "color": "dark-yellow",
+                "value": 65
+              },
+              {
+                "color": "dark-orange",
+                "value": 75
+              },
+              {
+                "color": "dark-red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Conjunto Almacenamiento 1 NVMe"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Conjunto Almacenamiento 2 HDD"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 44
+      },
+      "id": 40,
+      "interval": "5m",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"conjunto_almacenamiento_1_espacio_disponible\" or r[\"_field\"] == \"conjunto_almacenamiento_1_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.conjunto_almacenamiento_1_espacio_disponible) / float(v: r.conjunto_almacenamiento_1_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"conjunto_almacenamiento_2_espacio_disponible\" or r[\"_field\"] == \"conjunto_almacenamiento_2_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.conjunto_almacenamiento_2_espacio_disponible) / float(v: r.conjunto_almacenamiento_2_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        }
+      ],
+      "title": "Conjuntos Almacenamiento %",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Libre"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ocupado"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 9,
+        "x": 0,
+        "y": 50
+      },
+      "id": 28,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_2_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A-$B",
+          "hide": false,
+          "refId": "C",
+          "type": "math"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_2_capacidad_disponible\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        }
+      ],
+      "title": "ZFS - VMs",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              },
+              {
+                "color": "dark-yellow",
+                "value": 65
+              },
+              {
+                "color": "dark-orange",
+                "value": 75
+              },
+              {
+                "color": "dark-red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "VMs"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Almacén"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "BitTorrent"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 15,
+        "x": 9,
+        "y": 50
+      },
+      "id": 34,
+      "interval": "5m",
+      "options": {
+        "displayMode": "lcd",
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_2_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_2_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_2_capacidad_disponible) / float(v: r.carpeta_compartida_2_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_3_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_3_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_3_capacidad_disponible) / float(v: r.carpeta_compartida_3_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_4_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_4_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_4_capacidad_disponible) / float(v: r.carpeta_compartida_4_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "C"
+        }
+      ],
+      "title": "ZFS %",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Libre"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ocupado"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 9,
+        "x": 0,
+        "y": 55
+      },
+      "id": 29,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_3_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A-$B",
+          "hide": false,
+          "refId": "C",
+          "type": "math"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_3_capacidad_disponible\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        }
+      ],
+      "title": "ZFS - Almacén",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Libre"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ocupado"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 9,
+        "x": 0,
+        "y": 60
+      },
+      "id": 30,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_4_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A-$B",
+          "hide": false,
+          "refId": "C",
+          "type": "math"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_4_capacidad_disponible\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        }
+      ],
+      "title": "ZFS - BitTorrent",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              },
+              {
+                "color": "dark-yellow",
+                "value": 65
+              },
+              {
+                "color": "dark-orange",
+                "value": 75
+              },
+              {
+                "color": "dark-red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "VMs"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Almacén"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "BitTorrent"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 65
+      },
+      "id": 41,
+      "interval": "5m",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_2_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_2_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_2_capacidad_disponible) / float(v: r.carpeta_compartida_2_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_3_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_3_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_3_capacidad_disponible) / float(v: r.carpeta_compartida_3_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_4_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_4_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_4_capacidad_disponible) / float(v: r.carpeta_compartida_4_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "C"
+        }
+      ],
+      "title": "ZFS %",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Libre"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ocupado"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 9,
+        "x": 0,
+        "y": 73
+      },
+      "id": 31,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_5_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A-$B",
+          "hide": false,
+          "refId": "C",
+          "type": "math"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_5_capacidad_disponible\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        }
+      ],
+      "title": "ZFS - Copias Seguridad",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              },
+              {
+                "color": "dark-yellow",
+                "value": 65
+              },
+              {
+                "color": "dark-orange",
+                "value": 75
+              },
+              {
+                "color": "dark-red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Copias Seguridad"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Multimedia"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "QVR Elite"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 15,
+        "x": 9,
+        "y": 73
+      },
+      "id": 35,
+      "interval": "5m",
+      "options": {
+        "displayMode": "lcd",
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_5_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_5_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_5_capacidad_disponible) / float(v: r.carpeta_compartida_5_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_6_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_6_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_6_capacidad_disponible) / float(v: r.carpeta_compartida_6_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_7_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_7_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_7_capacidad_disponible) / float(v: r.carpeta_compartida_7_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "C"
+        }
+      ],
+      "title": "ZFS %",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Libre"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ocupado"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 9,
+        "x": 0,
+        "y": 78
+      },
+      "id": 32,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_6_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A-$B",
+          "hide": false,
+          "refId": "C",
+          "type": "math"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_6_capacidad_disponible\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        }
+      ],
+      "title": "ZFS - Multimedia",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Libre"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ocupado"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 9,
+        "x": 0,
+        "y": 83
+      },
+      "id": 33,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_7_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A-$B",
+          "hide": false,
+          "refId": "C",
+          "type": "math"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_7_capacidad_disponible\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        }
+      ],
+      "title": "ZFS - QVR Elite",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ddjpt3dm2fhfkc"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "displayName": "${__field.labels.sysVolumeDescrEX}",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              },
+              {
+                "color": "dark-yellow",
+                "value": 65
+              },
+              {
+                "color": "dark-orange",
+                "value": 75
+              },
+              {
+                "color": "dark-red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Copias Seguridad"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Multimedia"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "QVR Elite"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 88
+      },
+      "id": 42,
+      "interval": "5m",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_5_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_5_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_5_capacidad_disponible) / float(v: r.carpeta_compartida_5_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_6_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_6_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_6_capacidad_disponible) / float(v: r.carpeta_compartida_6_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ddjpt3dm2fhfkc"
+          },
+          "hide": false,
+          "query": "from(bucket: \"QNAPTVSh1288X\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP_TVS-h1288X\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"carpeta_compartida_7_capacidad_disponible\" or r[\"_field\"] == \"carpeta_compartida_7_capacidad_total\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] == \"192.168.10.2\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"qnaptvsh1288x\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({ r with  _value: 100.0 - (float(v: r.carpeta_compartida_7_capacidad_disponible) / float(v: r.carpeta_compartida_7_capacidad_total) * 100.0) }))\r\n  |> group(columns: [\"source\",\"_field\",\"agent_host\"])\r\n  |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "C"
+        }
+      ],
+      "title": "ZFS %",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_value": false,
+              "sysVolumeFreeSize": true,
+              "sysVolumeTotalSizeEX": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "revision": 1,
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "auto": true,
+        "auto_count": 100,
+        "auto_min": "30s",
+        "current": {
+          "selected": false,
+          "text": "auto",
+          "value": "$__auto_interval_interval"
+        },
+        "hide": 0,
+        "label": "Sampling",
+        "name": "interval",
+        "options": [
+          {
+            "selected": true,
+            "text": "auto",
+            "value": "$__auto_interval_interval"
+          },
+          {
+            "selected": false,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "7d",
+            "value": "7d"
+          },
+          {
+            "selected": false,
+            "text": "14d",
+            "value": "14d"
+          },
+          {
+            "selected": false,
+            "text": "30d",
+            "value": "30d"
+          }
+        ],
+        "query": "1m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
+        "queryValue": "",
+        "refresh": 2,
+        "skipUrlSync": false,
+        "type": "interval"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "ddjpt3dm2fhfkc"
+        },
+        "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP.enclosureTable\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] != \"\")\r\n  |> keep(columns: [\"agent_host\"])\r\n  |> distinct(column: \"agent_host\")\r\n  |> group()\r\n  \r\n",
+        "description": "QNAP Hostname Variable",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Hostname",
+        "multi": true,
+        "name": "qnaphostname",
+        "options": [],
+        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP.enclosureTable\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] != \"\")\r\n  |> keep(columns: [\"agent_host\"])\r\n  |> distinct(column: \"agent_host\")\r\n  |> group()\r\n  \r\n",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "ddjpt3dm2fhfkc"
+        },
+        "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP.enclosureTable\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"enclosureSerialNum\" and  r[\"enclosureID\"] == \"0\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] =~ /${qnaphostname:regex}/)\r\n  |> keep(columns: [\"enclosureModel\"])\r\n  |> distinct(column: \"enclosureModel\")\r\n  |> group()\r\n  \r\n",
+        "description": "QNAP Model Variable",
+        "hide": 0,
+        "includeAll": true,
+        "label": "QNAP",
+        "multi": true,
+        "name": "qnapmodel",
+        "options": [],
+        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP.enclosureTable\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"enclosureSerialNum\" and  r[\"enclosureID\"] == \"0\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] =~ /${qnaphostname:regex}/)\r\n  |> keep(columns: [\"enclosureModel\"])\r\n  |> distinct(column: \"enclosureModel\")\r\n  |> group()\r\n  \r\n",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "ddjpt3dm2fhfkc"
+        },
+        "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP.diskTable\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] =~ /${qnaphostname:regex}/)\r\n  |> keep(columns: [\"diskID\"])\r\n  |> distinct(column: \"diskID\")\r\n  |> group()\r\n  \r\n",
+        "description": "QNAP Hostname Variable",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Disk",
+        "multi": true,
+        "name": "qnapdisk",
+        "options": [],
+        "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"snmp.QNAP.diskTable\")\r\n  |> filter(fn: (r) => r[\"agent_host\"] =~ /${qnaphostname:regex}/)\r\n  |> keep(columns: [\"diskID\"])\r\n  |> distinct(column: \"diskID\")\r\n  |> group()\r\n  \r\n",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-12h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "QNAP TVS-h1288X",
+  "uid": "WwEIDjJVz",
+  "version": 49,
+  "weekStart": ""
+}
