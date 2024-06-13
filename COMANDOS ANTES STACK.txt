@@ -1,0 +1,25 @@
+#Creación de todas las carpetas y archivos, hay que hacerlo antes de levantar el STACK
+
+mkdir -p /share/MaquinasVirtuales/Docker/telegraf
+mkdir -p /share/MaquinasVirtuales/Docker/influxdb
+mkdir -p /share/MaquinasVirtuales/Docker/grafana
+
+touch /share/MaquinasVirtuales/Docker/telegraf/telegraf.conf
+
+mkdir -p /share/MaquinasVirtuales/Docker/grafana/grafana_data
+chmod 777 -R /share/MaquinasVirtuales/Docker/grafana/grafana_data
+
+## Ahora hay que crear la CA y los certificados digitales, con su propio tutorial.
+
+chmod 755 /share/MaquinasVirtuales/redeszone-ca.crt
+chmod 755 /share/MaquinasVirtuales/redeszone-autofirmado.crt
+chmod 755 /share/MaquinasVirtuales/redeszone-autofirmado.key
+
+cp /share/MaquinasVirtuales/redeszone-ca.crt /share/MaquinasVirtuales/Docker/telegraf/redeszone-ca.crt
+cp /share/MaquinasVirtuales/redeszone-autofirmado.crt /share/MaquinasVirtuales/Docker/influxdb/redeszone-autofirmado.crt
+cp /share/MaquinasVirtuales/redeszone-autofirmado.key /share/MaquinasVirtuales/Docker/influxdb/redeszone-autofirmado.key
+cp /share/MaquinasVirtuales/redeszone-autofirmado.crt /share/MaquinasVirtuales/Docker/grafana/redeszone-autofirmado.crt
+cp /share/MaquinasVirtuales/redeszone-autofirmado.key /share/MaquinasVirtuales/Docker/grafana/redeszone-autofirmado.key
+
+#Levantar stack
+
